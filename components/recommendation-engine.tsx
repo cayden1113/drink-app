@@ -1,25 +1,4 @@
 // 推荐引擎 - 基于生理数据生成水分配方推荐
-const ingredientMap = {
-  ginseng: "人参",
-  astragalus: "黄芪",
-  licorice: "甘草",
-  goji: "枸杞",
-  chrysanthemum: "菊花",
-  schisandra: "五味子",
-  angelica: "当归",
-  poria: "茯苓",
-  atractylodes: "白术",
-  honeysuckle: "金银花",
-  magnesium: "镁",
-  calcium: "钙",
-  potassium: "钾",
-  sodium: "钠",
-  zinc: "锌",
-  selenium: "硒",
-  electrolytes: "电解质",
-  vitamin_b: "维生素B",
-};
-
 const RecommendationEngine = {
   generateRecommendations: (healthData: any) => {
     // 基于水分水平的推荐
@@ -28,101 +7,141 @@ const RecommendationEngine = {
         name: "快速水分补充配方",
         forCondition: "水分不足",
         elementLevels: {
-          [ingredientMap.ginseng]: 15,
-          [ingredientMap.astragalus]: 10,
-          [ingredientMap.licorice]: 5,
-          [ingredientMap.goji]: 12,
-          [ingredientMap.chrysanthemum]: 8,
-          [ingredientMap.schisandra]: 5,
-          [ingredientMap.angelica]: 8,
-          [ingredientMap.poria]: 10,
-          [ingredientMap.magnesium]: 15,
-          [ingredientMap.calcium]: 10,
-          [ingredientMap.potassium]: 20,
-          [ingredientMap.sodium]: 25,
-          [ingredientMap.zinc]: 2,
-          [ingredientMap.selenium]: 1,
-          [ingredientMap.electrolytes]: 40,
-          [ingredientMap.vitamin_b]: 5,
+          // 中医成分
+          ginseng: 15,
+          astragalus: 10,
+          licorice: 5,
+          goji: 12,
+          chrysanthemum: 8,
+          schisandra: 5,
+          angelica: 8,
+          poria: 10,
+          // 西医成分
+          magnesium: 15,
+          calcium: 10,
+          potassium: 20,
+          sodium: 25,
+          zinc: 2,
+          selenium: 1,
+          electrolytes: 40,
+          vitamin_b: 5,
         },
-        highlightedElements: [
-          ingredientMap.electrolytes,
-          ingredientMap.potassium,
-          ingredientMap.sodium,
-          ingredientMap.goji,
-          ingredientMap.poria,
-        ],
-        type: "平衡型", // 中文类型
-      };
+        highlightedElements: ["electrolytes", "potassium", "sodium", "goji", "poria"],
+        type: "balanced",
+      }
     }
 
-    // 基于压力水平的推荐（示例）
+    // 基于压力水平的推荐
     if (healthData.stressLevel > 60) {
       return {
         name: "舒缓压力配方",
         forCondition: "压力水平高",
         elementLevels: {
-          [ingredientMap.ginseng]: 20,
-          [ingredientMap.schisandra]: 15,
-          [ingredientMap.licorice]: 10,
-          [ingredientMap.chrysanthemum]: 12,
-          [ingredientMap.angelica]: 8,
-          [ingredientMap.poria]: 15,
-          [ingredientMap.atractylodes]: 10,
-          [ingredientMap.honeysuckle]: 8,
-          [ingredientMap.magnesium]: 35,
-          [ingredientMap.calcium]: 15,
-          [ingredientMap.potassium]: 10,
-          [ingredientMap.sodium]: 5,
-          [ingredientMap.zinc]: 5,
-          [ingredientMap.selenium]: 3,
-          [ingredientMap.electrolytes]: 20,
-          [ingredientMap.vitamin_b]: 15,
+          // 中医成分
+          ginseng: 20,
+          schisandra: 15,
+          licorice: 10,
+          chrysanthemum: 12,
+          angelica: 8,
+          poria: 15,
+          atractylodes: 10,
+          honeysuckle: 8,
+          // 西医成分
+          magnesium: 35,
+          calcium: 15,
+          potassium: 10,
+          sodium: 5,
+          zinc: 5,
+          selenium: 3,
+          electrolytes: 20,
+          vitamin_b: 15,
         },
-        highlightedElements: [
-          ingredientMap.magnesium,
-          ingredientMap.vitamin_b,
-          ingredientMap.selenium,
-          ingredientMap.schisandra,
-          ingredientMap.poria,
-        ],
-        type: "中医侧重型", // 中文类型
-      };
+        highlightedElements: ["magnesium", "vitamin_b", "selenium", "schisandra", "poria"],
+        type: "tcm-focused",
+      }
     }
 
-    // 其他条件推荐...
+    // 基于心率的推荐
+    if (healthData.heartRate > 85) {
+      return {
+        name: "心血管支持配方",
+        forCondition: "心率偏高",
+        elementLevels: {
+          // 中医成分
+          ginseng: 10,
+          schisandra: 15,
+          chrysanthemum: 20,
+          honeysuckle: 10,
+          angelica: 5,
+          // 西医成分
+          magnesium: 25,
+          calcium: 15,
+          potassium: 25,
+          sodium: 5,
+          zinc: 3,
+          selenium: 2,
+          electrolytes: 15,
+          vitamin_b: 5,
+        },
+        highlightedElements: ["potassium", "magnesium", "chrysanthemum", "schisandra"],
+        type: "balanced",
+      }
+    }
+
+    // 基于体温的推荐
+    if (healthData.bodyTemperature > 37.2) {
+      return {
+        name: "降温平衡配方",
+        forCondition: "体温偏高",
+        elementLevels: {
+          // 中医成分
+          chrysanthemum: 25,
+          honeysuckle: 20,
+          licorice: 10,
+          goji: 5,
+          // 西医成分
+          magnesium: 15,
+          calcium: 10,
+          potassium: 15,
+          sodium: 20,
+          zinc: 5,
+          selenium: 2,
+          electrolytes: 30,
+          vitamin_b: 3,
+        },
+        highlightedElements: ["electrolytes", "sodium", "chrysanthemum", "honeysuckle"],
+        type: "tcm-focused",
+      }
+    }
 
     // 默认推荐
     return {
       name: "日常平衡配方",
       forCondition: "日常维护",
       elementLevels: {
-        [ingredientMap.ginseng]: 10,
-        [ingredientMap.astragalus]: 10,
-        [ingredientMap.licorice]: 5,
-        [ingredientMap.goji]: 10,
-        [ingredientMap.chrysanthemum]: 5,
-        [ingredientMap.schisandra]: 5,
-        [ingredientMap.angelica]: 5,
-        [ingredientMap.poria]: 10,
-        [ingredientMap.magnesium]: 20,
-        [ingredientMap.calcium]: 20,
-        [ingredientMap.potassium]: 15,
-        [ingredientMap.sodium]: 10,
-        [ingredientMap.zinc]: 3,
-        [ingredientMap.selenium]: 2,
-        [ingredientMap.electrolytes]: 15,
-        [ingredientMap.vitamin_b]: 5,
+        // 中医成分
+        ginseng: 10,
+        astragalus: 10,
+        licorice: 5,
+        goji: 10,
+        chrysanthemum: 5,
+        schisandra: 5,
+        angelica: 5,
+        poria: 10,
+        // 西医成分
+        magnesium: 20,
+        calcium: 20,
+        potassium: 15,
+        sodium: 10,
+        zinc: 3,
+        selenium: 2,
+        electrolytes: 15,
+        vitamin_b: 5,
       },
-      highlightedElements: [
-        ingredientMap.magnesium,
-        ingredientMap.calcium,
-        ingredientMap.ginseng,
-        ingredientMap.goji,
-      ],
-      type: "平衡型",
-    };
+      highlightedElements: ["magnesium", "calcium", "ginseng", "goji"],
+      type: "balanced",
+    }
   },
-};
+}
 
-export default RecommendationEngine;
+export default RecommendationEngine
