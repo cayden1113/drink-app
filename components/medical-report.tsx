@@ -1,4 +1,5 @@
 "use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -40,8 +41,8 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
     return (
       <Card>
         <CardHeader>
-          <CardTitle>健康报告</CardTitle> {/* 修正：章衡报告 → 健康报告（若为通用场景） */}
-          <CardDescription>连接您的智能手环以生成健康报告</CardDescription> {/* 修正：章衡 → 健康 */}
+          <CardTitle>健康报告</CardTitle>
+          <CardDescription>连接您的智能手环以生成健康报告</CardDescription>
         </CardHeader>
         <CardContent className="h-80 flex items-center justify-center">
           <div className="text-center text-muted-foreground">
@@ -71,7 +72,7 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
         <CardHeader className="pb-4">
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-xl">综合健康评估</CardTitle> {/* 修正：章衡健康评估 → 综合健康评估 */}
+              <CardTitle className="text-xl">健康评估</CardTitle>
               <CardDescription>
                 生成时间: {currentDate} {currentTime}
               </CardDescription>
@@ -102,7 +103,6 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
             </TabsList>
             
             <TabsContent value="summary" className="mt-4 space-y-6">
-              {/* 以下内容保持中文不变，仅修正标题一致性 */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
                   <CardHeader className="pb-2">
@@ -123,17 +123,314 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                   </CardContent>
                 </Card>
                 
-                {/* 中医体质评估、西医健康状态等模块内容保持中文不变 */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">中医体质评估</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col items-center">
+                      <Leaf className="h-8 w-8 text-emerald-500 mb-2" />
+                      <div className="text-center">
+                        <div className="font-medium">
+                          {data.yinYangBalance > 0.3 ? "阳盛体质" : 
+                           data.yinYangBalance < -0.3 ? "阴虚体质" : "平和体质"}
+                        </div>
+                        <div className="flex flex-wrap justify-center gap-1 mt-2">
+                          {data.meridianBalance.liver < 70 && (
+                            <Badge className="bg-green-100 text-green-800">肝气郁结</Badge>
+                          )}
+                          {data.meridianBalance.spleen < 70 && (
+                            <Badge className="bg-yellow-100 text-yellow-800">脾虚湿盛</Badge>
+                          )}
+                          {data.stressLevel > 50 && (
+                            <Badge className="bg-purple-100 text-purple-800">气郁体质</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium">西医健康状态</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col items-center">
+                      <Pill className="h-8 w-8 text-blue-500 mb-2" />
+                      <div className="text-center">
+                        <div className="font-medium">
+                          {data.inflammation > 3 ? "轻度炎症状态" : 
+                           data.hydrationLevel < 60 ? "轻度脱水状态" : "基本健康"}
+                        </div>
+                        <div className="flex flex-wrap justify-center gap-1 mt-2">
+                          {data.inflammation > 2.5 && (
+                            <Badge className="bg-red-100 text-red-800">炎症指数↑</Badge>
+                          )}
+                          {data.cortisol > 15 && (
+                            <Badge className="bg-amber-100 text-amber-800">压力激素↑</Badge>
+                          )}
+                          {data.immuneActivity < 70 && (
+                            <Badge className="bg-blue-100 text-blue-800">免疫力↓</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>健康风险评估</CardTitle>
+                  <CardDescription>基于您的生理数据分析的潜在健康风险</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="border rounded-lg p-4">
+                        <div className="flex items-center mb-2">
+                          <Activity className="h-5 w-5 text-amber-500 mr-2" />
+                          <h3 className="font-medium">压力管理</h3>
+                        </div>
+                        <div className="w-full h-2 bg-gray-200 rounded-full mb-2">
+                          <div 
+                            className={`h-full rounded-full ${
+                              data.stressLevel > 60 ? "bg-red-500" : 
+                              data.stressLevel > 40 ? "bg-amber-500" : "bg-green-500"
+                            }`} 
+                            style={{ width: `${data.stressLevel}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {data.stressLevel > 60 ? "高风险" : 
+                           data.stressLevel > 40 ? "中等风险" : "低风险"} ({Number(data.stressLevel).toFixed(1)}%)
+                        </p>
+                      </div>
+                      
+                      <div className="border rounded-lg p-4">
+                        <div className="flex items-center mb-2">
+                          <Leaf className="h-5 w-5 text-emerald-500 mr-2" />
+                          <h3 className="font-medium">阴阳平衡</h3>
+                        </div>
+                        <div className="relative h-2 bg-gradient-to-r from-blue-400 via-purple-200 to-red-400 rounded-full mb-2">
+                          <div 
+                            className="absolute top-0 bottom-0 w-2 h-2 bg-white border border-gray-800 rounded-full"
+                            style={{
+                              left: `calc(50% + ${data.yinYangBalance * 50}% - 4px)`,
+                            }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {data.yinYangBalance > 0.3 ? "偏阳" : 
+                           data.yinYangBalance < -0.3 ? "偏阴" : "平衡"} ({Number(data.yinYangBalance).toFixed(1)})
+                        </p>
+                      </div>
+                      
+                      <div className="border rounded-lg p-4">
+                        <div className="flex items-center mb-2">
+                          <Pill className="h-5 w-5 text-blue-500 mr-2" />
+                          <h3 className="font-medium">炎症指数</h3>
+                        </div>
+                        <div className="w-full h-2 bg-gray-200 rounded-full mb-2">
+                          <div 
+                            className={`h-full rounded-full ${
+                              data.inflammation > 3 ? "bg-red-500" : 
+                              data.inflammation > 2 ? "bg-amber-500" : "bg-green-500"
+                            }`} 
+                            style={{ width: `${(data.inflammation / 5) * 100}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          {data.inflammation > 3 ? "高风险" : 
+                           data.inflammation > 2 ? "中等风险" : "低风险"} ({Number(data.inflammation).toFixed(1)})
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4">
+                      <h3 className="font-medium mb-2">综合评估结果</h3>
+                      <p className="text-sm">
+                        根据您的生理数据分析，您的整体健康状况为<span className="font-medium text-blue-600">良好</span>。
+                        您的主要健康风险点在于{data.stressLevel > 50 ? "压力管理" : 
+                        data.inflammation > 2.5 ? "炎症水平" : 
+                        data.hydrationLevel < 60 ? "水分水平" : "免疫功能"}，
+                        建议您关注这一方面并采取相应的改善措施。
+                      </p>
+                      <div className="mt-2 text-sm">
+                        <h4 className="font-medium mb-1">建议关注：</h4>
+                        <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                          {data.stressLevel > 50 && <li>减轻压力，增加放松活动</li>}
+                          {data.inflammation > 2.5 && <li>调整饮食，增加抗炎食物摄入</li>}
+                          {data.hydrationLevel < 60 && <li>增加水分摄入，使用定制水疗方案</li>}
+                          {data.immuneActivity < 70 && <li>增强免疫力，保持充足睡眠</li>}
+                          <li>定期监测健康指标变化</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
             
-            {/* 中医诊断、西医诊断、治疗建议等Tabs内容保持中文不变 */}
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}当进行太极、八段锦等传统养生运动</li>
+            <TabsContent value="tcm">
+              <Card>
+                <CardHeader>
+                  <CardTitle>中医诊断报告</CardTitle>
+                  <CardDescription>基于传统中医理论的体质分析</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="text-lg font-medium mb-3">体质辨识</h3>
+                        <div className="border rounded-lg p-4">
+                          <div className="flex items-center mb-3">
+                            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center mr-3">
+                              <Leaf className="h-5 w-5 text-emerald-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">
+                                {data.yinYangBalance > 0.3 ? "阳盛体质" : 
+                                 data.yinYangBalance < -0.3 ? "阴虚体质" : "平和体质"}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">阴阳平衡: {Number(data.yinYangBalance).toFixed(1)}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <div>
+                              <div className="flex justify-between text-sm mb-1">
+                                <span>阴阳平衡</span>
+                                <span>{Number(data.yinYangBalance).toFixed(1)}</span>
+                              </div>
+                              <div className="relative h-2 bg-gradient-to-r from-blue-400 via-purple-200 to-red-400 rounded-full">
+                                <div 
+                                  className="absolute top-0 bottom-0 w-2 h-2 bg-white border border-gray-800 rounded-full"
+                                  style={{
+                                    left: `calc(50% + ${data.yinYangBalance * 50}% - 4px)`,
+                                  }}
+                                ></div>
+                              </div>
+                            </div>
+                            
+                            <div>
+                              <h4 className="text-sm font-medium mt-3 mb-2">体质特征</h4>
+                              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                                {data.yinYangBalance > 0.3 && (
+                                  <>
+                                    <li>面色偏红，容易口干舌燥</li>
+                                    <li>性格急躁，易出汗</li>
+                                    <li>偏好冷饮，不耐热</li>
+                                  </>
+                                )}
+                                {data.yinYangBalance < -0.3 && (
+                                  <>
+                                    <li>面色偏白，手脚易冰凉</li>
+                                    <li>精神疲倦，怕冷</li>
+                                    <li>偏好热饮，不耐寒</li>
+                                  </>
+                                )}
+                                {data.yinYangBalance >= -0.3 && data.yinYangBalance <= 0.3 && (
+                                  <>
+                                    <li>面色红润，精力充沛</li>
+                                    <li>情绪稳定，适应力强</li>
+                                    <li>饮食规律，睡眠良好</li>
+                                  </>
+                                )}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-3">经络状态</h3>
+                        <div className="border rounded-lg p-4">
+                          <div className="grid grid-cols-5 gap-2 mb-3">
+                            {Object.entries(data.meridianBalance).map(([meridian, value]) => (
+                              <div key={meridian} className="text-center">
+                                <div className="w-full bg-gray-200 h-2 rounded-full mb-1">
+                                  <div
+                                    className={`h-full rounded-full ${
+                                      Number(value) > 80 ? "bg-green-500" : Number(value) > 70 ? "bg-blue-500" : "bg-amber-500"
+                                    }`}
+                                    style={{ width: `${value}%` }}
+                                  ></div>
+                                </div>
+                                <div className="text-xs">{meridian}经</div>
+                                <div className="text-xs font-medium">{Number(value).toFixed(1)}%</div>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <div className="space-y-2 mt-4">
+                            <h4 className="text-sm font-medium mb-2">经络异常</h4>
+                            {Object.entries(data.meridianBalance)
+                              .filter(([_, value]) => Number(value) < 70)
+                              .map(([meridian]) => (
+                                <div key={meridian} className="flex items-start">
+                                  <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 mr-2"></div>
+                                  <div>
+                                    <p className="text-sm font-medium">{meridian}经不足</p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {meridian === "肺" ? "可能导致呼吸系统问题，易感冒" : 
+                                       meridian === "心" ? "可能导致心悸、失眠、多梦" : 
+                                       meridian === "脾" ? "可能导致消化不良、疲劳乏力" : 
+                                       meridian === "肝" ? "可能导致情绪波动、头痛目眩" : 
+                                       "可能导致腰膝酸软、耳鸣健忘"}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            {Object.entries(data.meridianBalance).every(([_, value]) => Number(value) >= 70) && (
+                              <p className="text-sm text-muted-foreground">经络状态良好，无明显异常</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4">
+                      <h3 className="text-lg font-medium mb-3">中医调理建议</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">饮食调理</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                            {data.yinYangBalance > 0.3 && (
+                              <>
+                                <li>多食用滋阴清热食物：莲子、百合、银耳</li>
+                                <li>少食辛辣刺激性食物</li>
+                                <li>建议饮用菊花、枸杞茶</li>
+                              </>
+                            )}
+                            {data.yinYangBalance < -0.3 && (
+                              <>
+                                <li>多食用温阳补气食物：羊肉、生姜、桂圆</li>
+                                <li>少食生冷寒凉食物</li>
+                                <li>建议饮用红枣、黄芪茶</li>
+                              </>
+                            )}
+                            {data.meridianBalance.liver < 70 && (
+                              <li>多食用疏肝理气食物：柑橘、玫瑰花、白萝卜</li>
+                            )}
+                            {data.meridianBalance.spleen < 70 && (
+                              <li>多食用健脾益气食物：山药、红枣、小米</li>
+                            )}
+                          </ul>
+                        </div>
+                        
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">生活起居</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                            {data.yinYangBalance > 0.3 && (
+                              <li>保持情绪平和，避免过度劳累和熬夜</li>
+                            )}
+                            {data.yinYangBalance < -0.3 && (
+                              <li>注意保暖，避免受寒，适当运动增强体质</li>
+                            )}
+                            <li>保持规律作息，早睡早起</li>
+                            <li>适当进行太极、八段锦等传统养生运动</li>
                             <li>使用定制水疗方案调理体质</li>
                           </ul>
                         </div>
@@ -404,6 +701,36 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                           </ul>
                         </div>
                       </div>
+                      
+                      <div className="mt-4">
+                        <h4 className="text-sm font-medium mb-2">推荐医疗检查</h4>
+                        <div className="space-y-2">
+                          {data.inflammation > 2.5 && (
+                            <div className="flex items-center">
+                              <div className="w-2 h-2 rounded-full bg-amber-500 mr-2"></div>
+                              <span className="text-sm">建议进行C反应蛋白(CRP)检查</span>
+                            </div>
+                          )}
+                          {data.bloodGlucose > 5.6 && (
+                            <div className="flex items-center">
+                              <div className="w-2 h-2 rounded-full bg-amber-500 mr-2"></div>
+                              <span className="text-sm">建议进行糖化血红蛋白(HbA1c)检查</span>
+                            </div>
+                          )}
+                          {data.immuneActivity < 70 && (
+                            <div className="flex items-center">
+                              <div className="w-2 h-2 rounded-full bg-amber-500 mr-2"></div>
+                              <span className="text-sm">建议进行免疫功能评估检查</span>
+                            </div>
+                          )}
+                          {data.stressLevel > 60 && (
+                            <div className="flex items-center">
+                              <div className="w-2 h-2 rounded-full bg-amber-500 mr-2"></div>
+                              <span className="text-sm">建议进行激素水平检查</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -413,58 +740,240 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
             <TabsContent value="recommendations">
               <Card>
                 <CardHeader>
-                  <CardTitle>治疗建议</CardTitle>
-                  <CardDescription>基于您的健康状况提供的个性化建议</CardDescription>
+                  <CardTitle>综合治疗建议</CardTitle>
+                  <CardDescription>基于中西医结合的个性化健康管理方案</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {/* 建议内容 */}
+                  <div className="space-y-6">
                     <div className="border rounded-lg p-4">
-                      <h3 className="font-medium mb-2">综合建议</h3>
-                      <ul className="list-disc list-inside space-y-1 text-sm">
-                        {recommendations.general && recommendations.general.map((rec, index) => (
-                          <li key={index}>{rec}</li>
-                        ))}
-                      </ul>
+                      <h3 className="text-lg font-medium mb-3">治疗优先级</h3>
+                      <div className="space-y-3">
+                        {data.stressLevel > 50 && (
+                          <div className="flex items-start">
+                            <div className="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-0.5">
+                              <span className="text-xs font-medium text-red-800">1</span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium">压力管理</h4>
+                              <p className="text-sm text-muted-foreground">您的压力水平较高，建议优先进行压力管理，以降低健康风险。</p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {data.inflammation > 2.5 && (
+                          <div className="flex items-start">
+                            <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center mr-3 mt-0.5">
+                              <span className="text-xs font-medium text-amber-800">2</span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium">炎症控制</h4>
+                              <p className="text-sm text-muted-foreground">您的炎症指数偏高，建议调整饮食和生活方式以降低炎症水平。</p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {data.hydrationLevel < 60 && (
+                          <div className="flex items-start">
+                            <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                              <span className="text-xs font-medium text-blue-800">3</span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium">水分补充</h4>
+                              <p className="text-sm text-muted-foreground">您的水分水平偏低，建议增加水分摄入，改善水合状态。</p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {data.immuneActivity < 70 && (
+                          <div className="flex items-start">
+                            <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-3 mt-0.5">
+                              <span className="text-xs font-medium text-emerald-800">4</span>
+                            </div>
+                            <div>
+                              <h4 className="font-medium">免疫力提升</h4>
+                              <p className="text-sm text-muted-foreground">您的免疫功能偏低，建议采取措施增强免疫力，预防感染。</p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
-                    {/* 中医建议 */}
-                    <div className="border rounded-lg p-4">
-                      <h3 className="font-medium mb-2">中医调理</h3>
-                      <ul className="list-disc list-inside space-y-1 text-sm">
-                        {recommendations.tcm && recommendations.tcm.map((rec, index) => (
-                          <li key={index}>{rec}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    {/* 西医建议 */}
-                    <div className="border rounded-lg p-4">
-                      <h3 className="font-medium mb-2">西医建议</h3>
-                      <ul className="list-disc list-inside space-y-1 text-sm">
-                        {recommendations.western && recommendations.western.map((rec, index) => (
-                          <li key={index}>{rec}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    
-                    {/* 水疗建议 */}
-                    <div className="border rounded-lg p-4">
-                      <h3 className="font-medium mb-2">水疗方案</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">推荐成分</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {recommendations.spa && recommendations.spa.ingredients && recommendations.spa.ingredients.map((ingredient, index) => (
-                              <Badge key={index} className="bg-emerald-100 text-emerald-800">{ingredient}</Badge>
-                            ))}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="text-lg font-medium mb-3">短期行动计划</h3>
+                        <div className="border rounded-lg p-4">
+                          <div className="space-y-3">
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-blue-800">1</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">每日健康监测</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  每天早晨起床后测量体重、心率和血压，记录健康数据
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-blue-800">2</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">饮食调整</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  根据中西医诊断建议，调整饮食结构，增加抗炎食物和水的摄入
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-blue-800">3</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">压力管理</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  每天进行15-20分钟的冥想或深呼吸练习，减少压力
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-blue-800">4</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">睡眠改善</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  保持规律的睡眠时间，每晚保证7-8小时的高质量睡眠
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">使用频率</h4>
-                          <p className="text-sm">
-                            {recommendations.spa && recommendations.spa.frequency ? recommendations.spa.frequency : "每周2-3次"}
-                          </p>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-3">长期健康管理</h3>
+                        <div className="border rounded-lg p-4">
+                          <div className="space-y-3">
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-emerald-800">1</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">定期体检</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  每半年进行一次全面体检，监测健康指标变化
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-emerald-800">2</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">持续健康监测</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  持续使用健康监测设备，记录和分析健康数据变化趋势
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-emerald-800">3</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">规律运动</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  每周进行至少150分钟的中等强度有氧运动，如快走、游泳等
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-start">
+                              <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center mr-3 mt-0.5">
+                                <span className="text-xs font-medium text-emerald-800">4</span>
+                              </div>
+                              <div>
+                                <h4 className="font-medium">中西医结合调理</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  根据体质特点，结合中医调理方法和西医健康建议，制定个性化健康方案
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4">
+                      <h3 className="text-lg font-medium mb-3">定制水疗方案</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {recommendations.spaTreatments.map((treatment, index) => (
+                          <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <div className="flex items-center mb-3">
+                              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                <Pill className="h-5 w-5 text-blue-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">{treatment.name}</h4>
+                                <p className="text-xs text-muted-foreground">{treatment.duration}分钟</p>
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-3">
+                              {treatment.description}
+                            </p>
+                            </p>
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">{treatment.frequency}</span>
+                              <Badge className="bg-emerald-100 text-emerald-800">推荐</Badge>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg p-4">
+                      <h3 className="text-lg font-medium mb-3">随访计划</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-start">
+                          <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-0.5">
+                            <span className="text-xs font-medium text-purple-800">1</span>
+                          </div>
+                          <div>
+                            <h4 className="font-medium">2周后随访</h4>
+                            <p className="text-sm text-muted-foreground">
+                              评估短期行动计划执行情况，调整健康管理方案
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start">
+                          <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-0.5">
+                            <span className="text-xs font-medium text-purple-800">2</span>
+                          </div>
+                          <div>
+                            <h4 className="font-medium">1个月后复查</h4>
+                            <p className="text-sm text-muted-foreground">
+                              重新评估健康指标，检查炎症水平、压力激素等变化
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start">
+                          <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-0.5">
+                            <span className="text-xs font-medium text-purple-800">3</span>
+                          </div>
+                          <div>
+                            <h4 className="font-medium">3个月后全面评估</h4>
+                            <p className="text-sm text-muted-foreground">
+                              进行全面健康评估，根据结果制定下一阶段健康管理计划
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
