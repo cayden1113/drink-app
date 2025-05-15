@@ -374,10 +374,10 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                                   <div>
                                     <p className="text-sm font-medium">{meridian}经不足</p>
                                     <p className="text-xs text-muted-foreground">
-                                      {meridian === "lung" ? "可能导致呼吸系统问题，易感冒" : 
-                                       meridian === "heart" ? "可能导致心悸、失眠、多梦" : 
-                                       meridian === "spleen" ? "可能导致消化不良、疲劳乏力" : 
-                                       meridian === "liver" ? "可能导致情绪波动、头痛目眩" : 
+                                      {meridian === "肺" ? "可能导致呼吸系统问题，易感冒" : 
+                                       meridian === "心" ? "可能导致心悸、失眠、多梦" : 
+                                       meridian === "胃" ? "可能导致消化不良、疲劳乏力" : 
+                                       meridian === "脾" ? "可能导致情绪波动、头痛目眩" : 
                                        "可能导致腰膝酸软、耳鸣健忘"}
                                     </p>
                                   </div>
