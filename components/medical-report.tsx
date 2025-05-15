@@ -694,5 +694,5 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                             {data.stressLevel > 50 && (
                               <li>采用压力管理技巧：深呼吸、冥想、瑜伽</li>
                             )}
-                            <li>保持规律运动，每周至少150分钟中等强度有氧运动</li>\
+                            <li>保持规律运动，每周至少150分钟中等强度有氧运动</li>
                             <li>确保充足睡眠，每晚7-8小时
