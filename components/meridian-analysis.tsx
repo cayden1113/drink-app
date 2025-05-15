@@ -23,7 +23,7 @@ const meridianInfo = {
     timeRange: "3:00-5:00",
     description: "主管呼吸，调节水液代谢，连接皮肤和毛孔",
     symptoms: ["咳嗽", "气短", "胸闷", "感冒", "皮肤问题"],
-    recommendedElements: ["astragalus", "schisandra", "licorice"],
+    recommendedElements: ["黄芪", "五味子", "甘草"],
   },
   heart: {
     name: "心经",
@@ -34,7 +34,7 @@ const meridianInfo = {
     timeRange: "11:00-13:00",
     description: "主管血脉，储藏神志，控制情绪和精神活动",
     symptoms: ["心悸", "失眠", "多梦", "焦虑", "舌质异常"],
-    recommendedElements: ["schisandra", "licorice", "magnesium"],
+    recommendedElements: ["五味子", "甘草", "镁"],
   },
   spleen: {
     name: "脾经",
@@ -45,7 +45,7 @@ const meridianInfo = {
     timeRange: "9:00-11:00",
     description: "主管运化，转化食物为气血，维持肌肉和四肢",
     symptoms: ["消化不良", "食欲不振", "腹胀", "疲劳", "水肿"],
-    recommendedElements: ["ginseng", "astragalus", "licorice"],
+    recommendedElements: ["人参", "黄芪", "甘草"],
   },
   liver: {
     name: "肝经",
@@ -56,7 +56,7 @@ const meridianInfo = {
     timeRange: "1:00-3:00",
     description: "主管疏泄，储藏血液，调节情绪和内分泌",
     symptoms: ["头痛", "眼部问题", "肌腱问题", "情绪波动", "月经不调"],
-    recommendedElements: ["goji", "chrysanthemum", "schisandra"],
+    recommendedElements: ["枸杞", "菊花", "五味子"],
   },
   kidney: {
     name: "肾经",
@@ -67,7 +67,7 @@ const meridianInfo = {
     timeRange: "17:00-19:00",
     description: "主管生长发育和生殖，储藏先天之精，控制骨骼和脑髓",
     symptoms: ["腰痛", "耳鸣", "脱发", "骨质问题", "生殖系统问题"],
-    recommendedElements: ["goji", "ginseng", "vitamin_d"],
+    recommendedElements: ["枸杞", "人参", "维生素D"],
   },
 }
 
@@ -76,8 +76,8 @@ export default function MeridianAnalysis({ data, isConnected }: MeridianAnalysis
     return (
       <Card>
         <CardHeader>
-          <CardTitle>博络解析</CardTitle>
-          <CardDescription>连接您的智能手环以查看博络数据</CardDescription>
+          <CardTitle>经络解析</CardTitle>
+          <CardDescription>连接您的智能手环以查看经络数据</CardDescription>
         </CardHeader>
         <CardContent className="h-80 flex items-center justify-center">
           <div className="text-center text-muted-foreground">
