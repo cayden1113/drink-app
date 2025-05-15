@@ -688,20 +688,6 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                           </ul>
                         </div>
                         
-                         <div>
-                <h4 className="text-sm font-medium mb-2">生活方式建议</h4>
-                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                  {data.stressLevel > 50 && (
-                    <li>采用压力管理技巧：深呼吸、冥想、瑜伽</li>
-                  )}
-                  <li>保持规律运动，每周至少150分钟中等强度有氧运动</li>
-                  <li>确保充足睡眠，每晚7-8小时</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">生活方式建议</h4>
+                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
