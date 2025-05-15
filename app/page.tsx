@@ -11,7 +11,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col items-center justify-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-2 tracking-tight bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-2 text-blue-900 tracking-tight">
             沁源·中西智疗系统
           </h1>
           <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-teal-400 rounded-full mb-4"></div>

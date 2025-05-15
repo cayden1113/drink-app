@@ -47,9 +47,7 @@ export default function HealthMetrics({ data, isConnected }: HealthMetricsProps)
     return (
       <Card className="backdrop-blur-sm bg-white/80 border border-gray-100 shadow-lg">
         <CardHeader>
-          <CardTitle className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            健康指标
-          </CardTitle>
+          <CardTitle>健康指标</CardTitle>
           <CardDescription>连接您的智能手环以查看健康数据</CardDescription>
         </CardHeader>
         <CardContent className="h-80 flex items-center justify-center">
@@ -89,9 +87,7 @@ export default function HealthMetrics({ data, isConnected }: HealthMetricsProps)
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Droplet className="mr-2 h-5 w-5 text-blue-500" />
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  水分趋势
-                </span>
+                水分趋势
               </CardTitle>
               <CardDescription>过去7天的水分水平</CardDescription>
             </CardHeader>
@@ -122,9 +118,7 @@ export default function HealthMetrics({ data, isConnected }: HealthMetricsProps)
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Heart className="mr-2 h-5 w-5 text-rose-500" />
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  心率监测
-                </span>
+                心率监测
               </CardTitle>
               <CardDescription>过去7天的平均心率</CardDescription>
             </CardHeader>

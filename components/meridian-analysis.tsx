@@ -76,9 +76,7 @@ export default function MeridianAnalysis({ data, isConnected }: MeridianAnalysis
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-            博络解析
-          </CardTitle>
+          <CardTitle>博络解析</CardTitle>
           <CardDescription>连接您的智能手环以查看博络数据</CardDescription>
         </CardHeader>
         <CardContent className="h-80 flex items-center justify-center">

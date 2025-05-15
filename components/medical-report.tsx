@@ -72,7 +72,7 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
         <CardHeader className="pb-4">
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-xl bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">章衡健康评估</CardTitle>
+              <CardTitle className="text-xl">章衡健康评估</CardTitle>
               <CardDescription>
                 生成时间: {currentDate} {currentTime}
               </CardDescription>
@@ -691,3 +691,87 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                         <div>
                           <h4 className="text-sm font-medium mb-2">生活方式建议</h4>
                           <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                            {data.stressLevel > 50 && (
+                              <li>采用压力管理技巧：深呼吸、冥想、瑜伽</li>
+                            )}
+                            <li>保持规律运动，每周至少150分钟中等强度有氧运动</li>
+                            <li>确保充足睡眠，每晚7-8小时</li>
+                            <li>避免吸烟和过量饮酒</li>
+                            <li>定期监测健康指标变化</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="recommendations">
+              <Card>
+                <CardHeader>
+                  <CardTitle>治疗建议</CardTitle>
+                  <CardDescription>基于您的健康状况提供的个性化建议</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {/* 建议内容 */}
+                    <div className="border rounded-lg p-4">
+                      <h3 className="font-medium mb-2">综合建议</h3>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        {recommendations.general && recommendations.general.map((rec, index) => (
+                          <li key={index}>{rec}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    {/* 中医建议 */}
+                    <div className="border rounded-lg p-4">
+                      <h3 className="font-medium mb-2">中医调理</h3>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        {recommendations.tcm && recommendations.tcm.map((rec, index) => (
+                          <li key={index}>{rec}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    {/* 西医建议 */}
+                    <div className="border rounded-lg p-4">
+                      <h3 className="font-medium mb-2">西医建议</h3>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        {recommendations.western && recommendations.western.map((rec, index) => (
+                          <li key={index}>{rec}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    {/* 水疗建议 */}
+                    <div className="border rounded-lg p-4">
+                      <h3 className="font-medium mb-2">水疗方案</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">推荐成分</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {recommendations.spa && recommendations.spa.ingredients && recommendations.spa.ingredients.map((ingredient, index) => (
+                              <Badge key={index} className="bg-emerald-100 text-emerald-800">{ingredient}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">使用频率</h4>
+                          <p className="text-sm">
+                            {recommendations.spa && recommendations.spa.frequency ? recommendations.spa.frequency : "每周2-3次"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

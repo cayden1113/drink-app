@@ -493,9 +493,7 @@ export default function WaterGenerator({
           <Card className="backdrop-blur-sm bg-white/80 border border-gray-100 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                  甜润沁方定制
-                </span>
+                <span>甜润沁方定制</span>
                 <div className="flex items-center space-x-2">
                   <Badge variant="outline" className="bg-amber-50 text-amber-800 hover:bg-amber-100 border-amber-200">
                     <Leaf className="mr-1 h-3 w-3" />
@@ -573,9 +571,7 @@ export default function WaterGenerator({
         <div>
           <Card className="backdrop-blur-sm bg-white/80 border border-gray-100 shadow-lg">
             <CardHeader>
-              <CardTitle className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                您的定制水疗方案
-              </CardTitle>
+              <CardTitle>您的定制水疗方案</CardTitle>
               <CardDescription>
                 <input
                   type="text"
@@ -706,9 +702,7 @@ export default function WaterGenerator({
       {savedRecipes.length > 0 && (
         <Card className="mt-8 backdrop-blur-sm bg-white/80 border border-gray-100 shadow-lg">
           <CardHeader>
-            <CardTitle className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-              已保存的配方
-            </CardTitle>
+            <CardTitle>已保存的配方</CardTitle>
             <CardDescription>您的自定义水疗方案</CardDescription>
           </CardHeader>
           <CardContent>
