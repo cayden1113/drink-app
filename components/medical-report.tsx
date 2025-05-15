@@ -15,26 +15,17 @@ interface MedicalReportProps {
 
 export default function MedicalReport({ data, isConnected, recommendations }: MedicalReportProps) {
   const { toast } = useToast()
-  
+
   const handleDownload = () => {
-    toast({
-      title: "报告下载中",
-      description: "您的健康报告正在准备下载",
-    })
+    toast({ title: "报告下载中", description: "您的健康报告正在准备下载" })
   }
-  
+
   const handleShare = () => {
-    toast({
-      title: "分享功能",
-      description: "分享功能即将上线，敬请期待",
-    })
+    toast({ title: "分享功能", description: "分享功能即将上线，敬请期待" })
   }
-  
+
   const handlePrint = () => {
-    toast({
-      title: "打印报告",
-      description: "正在准备打印您的健康报告",
-    })
+    toast({ title: "打印报告", description: "正在准备打印您的健康报告" })
   }
 
   if (!isConnected) {
@@ -55,17 +46,26 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
     )
   }
 
-  const currentDate = new Date().toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  
-  const currentTime = new Date().toLocaleTimeString('zh-CN', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
+  const currentDate = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })
+  const currentTime = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
 
+  const meridianMap: Record<string, string> = {
+    lung: "肺",
+    heart: "心",
+    spleen: "脾",
+    liver: "肝",
+    kidney: "肾",
+  }
+
+  const meridianDescriptions: Record<string, string> = {
+    肺: "可能导致呼吸系统问题，易感冒",
+    心: "可能导致心悸、失眠、多梦",
+    胃: "可能导致消化不良、疲劳乏力",
+    脾: "可能导致情绪波动、头痛目眩",
+    肝: "可能导致腰膝酸软、耳鸣健忘",
+    肾: "可能导致腰膝酸软、耳鸣健忘",
+  }
+  
   return (
     <div className="space-y-6">
       <Card>
@@ -343,130 +343,132 @@ export default function MedicalReport({ data, isConnected, recommendations }: Me
                           </div>
                         </div>
                       </div>
-                      
-                      <div>
-                        <h3 className="text-lg font-medium mb-3">经络状态</h3>
-                        <div className="border rounded-lg p-4">
-                          <div className="grid grid-cols-5 gap-2 mb-3">
-                            {Object.entries(data.meridianBalance).map(([meridian, value]) => (
-                              <div key={meridian} className="text-center">
-                                <div className="w-full bg-gray-200 h-2 rounded-full mb-1">
-                                  <div
-                                    className={`h-full rounded-full ${
-                                      Number(value) > 80 ? "bg-green-500" : Number(value) > 70 ? "bg-blue-500" : "bg-amber-500"
-                                    }`}
-                                    style={{ width: `${value}%` }}
-                                  ></div>
-                                </div>
-                                <div className="text-xs">{meridian}经</div>
-                                <div className="text-xs font-medium">{Number(value).toFixed(1)}%</div>
-                              </div>
-                            ))}
-                          </div>
-                          
-                          <div className="space-y-2 mt-4">
-                            <h4 className="text-sm font-medium mb-2">经络异常</h4>
-                            {Object.entries(data.meridianBalance)
-                              .filter(([_, value]) => Number(value) < 70)
-                              .map(([meridian]) => (
-                                <div key={meridian} className="flex items-start">
-                                  <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 mr-2"></div>
-                                  <div>
-                                    <p className="text-sm font-medium">{meridian}经不足</p>
-                                    <p className="text-xs text-muted-foreground">
-                                      {meridian === "肺" ? "可能导致呼吸系统问题，易感冒" : 
-                                       meridian === "心" ? "可能导致心悸、失眠、多梦" : 
-                                       meridian === "胃" ? "可能导致消化不良、疲劳乏力" : 
-                                       meridian === "脾" ? "可能导致情绪波动、头痛目眩" : 
-                                       "可能导致腰膝酸软、耳鸣健忘"}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            {Object.entries(data.meridianBalance).every(([_, value]) => Number(value) >= 70) && (
-                              <p className="text-sm text-muted-foreground">经络状态良好，无明显异常</p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4">
-                      <h3 className="text-lg font-medium mb-3">中医调理建议</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">饮食调理</h4>
-                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                            {data.yinYangBalance > 0.3 && (
-                              <>
-                                <li>多食用滋阴清热食物：莲子、百合、银耳</li>
-                                <li>少食辛辣刺激性食物</li>
-                                <li>建议饮用菊花、枸杞茶</li>
-                              </>
-                            )}
-                            {data.yinYangBalance < -0.3 && (
-                              <>
-                                <li>多食用温阳补气食物：羊肉、生姜、桂圆</li>
-                                <li>少食生冷寒凉食物</li>
-                                <li>建议饮用红枣、黄芪茶</li>
-                              </>
-                            )}
-                            {data.meridianBalance.liver < 70 && (
-                              <li>多食用疏肝理气食物：柑橘、玫瑰花、白萝卜</li>
-                            )}
-                            {data.meridianBalance.spleen < 70 && (
-                              <li>多食用健脾益气食物：山药、红枣、小米</li>
-                            )}
-                          </ul>
-                        </div>
-                        
-                        <div>
-                          <h4 className="text-sm font-medium mb-2">生活起居</h4>
-                          <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                            {data.yinYangBalance > 0.3 && (
-                              <li>保持情绪平和，避免过度劳累和熬夜</li>
-                            )}
-                            {data.yinYangBalance < -0.3 && (
-                              <li>注意保暖，避免受寒，适当运动增强体质</li>
-                            )}
-                            <li>保持规律作息，早睡早起</li>
-                            <li>适当进行太极、八段锦等传统养生运动</li>
-                            <li>使用定制水疗方案调理体质</li>
-                          </ul>
-                        </div>
-                      </div>
-                      
-                      <div className="mt-4">
-                        <h4 className="text-sm font-medium mb-2">推荐水疗方案</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {data.yinYangBalance > 0.3 && (
-                            <>
-                              <Badge className="bg-emerald-100 text-emerald-800">菊花提取物</Badge>
-                              <Badge className="bg-emerald-100 text-emerald-800">枸杞提取物</Badge>
-                            </>
-                          )}
-                          {data.yinYangBalance < -0.3 && (
-                            <>
-                              <Badge className="bg-emerald-100 text-emerald-800">人参提取物</Badge>
-                              <Badge className="bg-emerald-100 text-emerald-800">黄芪提取物</Badge>
-                            </>
-                          )}
-                          {data.meridianBalance.liver < 70 && (
-                            <Badge className="bg-emerald-100 text-emerald-800">菊花提取物</Badge>
-                          )}
-                          {data.meridianBalance.spleen < 70 && (
-                            <Badge className="bg-emerald-100 text-emerald-800">黄芪提取物</Badge>
-                          )}
-                          {data.meridianBalance.kidney < 70 && (
-                            <Badge className="bg-emerald-100 text-emerald-800">枸杞提取物</Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                     
+
+<div>
+  <h3 className="text-lg font-medium mb-3">经络状态</h3>
+  <div className="border rounded-lg p-4">
+    {/* 经络条形图 */}
+    <div className="grid grid-cols-5 gap-2 mb-3">
+      {Object.entries(data.meridianBalance).map(([meridian, value]) => (
+        <div key={meridian} className="text-center">
+          <div className="w-full bg-gray-200 h-2 rounded-full mb-1">
+            <div
+              className={`h-full rounded-full ${
+                Number(value) > 80 ? "bg-green-500" : Number(value) > 70 ? "bg-blue-500" : "bg-amber-500"
+              }`}
+              style={{ width: `${value}%` }}
+            ></div>
+          </div>
+          <div className="text-xs">{meridianMap[meridian]}经</div>
+          <div className="text-xs font-medium">{Number(value).toFixed(1)}%</div>
+        </div>
+      ))}
+    </div>
+
+    {/* 经络异常提示 */}
+    <div className="space-y-2 mt-4">
+      <h4 className="text-sm font-medium mb-2">经络异常</h4>
+      {Object.entries(data.meridianBalance)
+        .filter(([_, value]) => Number(value) < 70)
+        .map(([meridian]) => {
+          const zhName = meridianMap[meridian];
+          return (
+            <div key={meridian} className="flex items-start">
+              <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5 mr-2"></div>
+              <div>
+                <p className="text-sm font-medium">{zhName}经不足</p>
+                <p className="text-xs text-muted-foreground">
+                  {meridianDescriptions[zhName] || "可能导致身体机能下降，需及时调理"}
+                </p>
+              </div>
+            </div>
+          );
+        })}
+      {Object.entries(data.meridianBalance).every(([_, value]) => Number(value) >= 70) && (
+        <p className="text-sm text-muted-foreground">经络状态良好，无明显异常</p>
+      )}
+    </div>
+  </div>
+
+  {/* 中医调理建议 */}
+  <div className="border rounded-lg p-4 mt-6">
+    <h3 className="text-lg font-medium mb-3">中医调理建议</h3>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* 饮食调理 */}
+      <div>
+        <h4 className="text-sm font-medium mb-2">饮食调理</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          {data.yinYangBalance > 0.3 && (
+            <>
+              <li>多食用滋阴清热食物：莲子、百合、银耳</li>
+              <li>少食辛辣刺激性食物</li>
+              <li>建议饮用菊花、枸杞茶</li>
+            </>
+          )}
+          {data.yinYangBalance < -0.3 && (
+            <>
+              <li>多食用温阳补气食物：羊肉、生姜、桂圆</li>
+              <li>少食生冷寒凉食物</li>
+              <li>建议饮用红枣、黄芪茶</li>
+            </>
+          )}
+          {data.meridianBalance.liver < 70 && (
+            <li>多食用疏肝理气食物：柑橘、玫瑰花、白萝卜</li>
+          )}
+          {data.meridianBalance.spleen < 70 && (
+            <li>多食用健脾益气食物：山药、红枣、小米</li>
+          )}
+        </ul>
+      </div>
+
+      {/* 生活起居 */}
+      <div>
+        <h4 className="text-sm font-medium mb-2">生活起居</h4>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          {data.yinYangBalance > 0.3 && (
+            <li>保持情绪平和，避免过度劳累和熬夜</li>
+          )}
+          {data.yinYangBalance < -0.3 && (
+            <li>注意保暖，避免受寒，适当运动增强体质</li>
+          )}
+          <li>保持规律作息，早睡早起</li>
+          <li>适当进行太极、八段锦等传统养生运动</li>
+          <li>使用定制水疗方案调理体质</li>
+        </ul>
+      </div>
+    </div>
+
+    {/* 推荐水疗方案 */}
+    <div className="mt-4">
+      <h4 className="text-sm font-medium mb-2">推荐水疗方案</h4>
+      <div className="flex flex-wrap gap-2">
+        {data.yinYangBalance > 0.3 && (
+          <>
+            <Badge className="bg-emerald-100 text-emerald-800">菊花提取物</Badge>
+            <Badge className="bg-emerald-100 text-emerald-800">枸杞提取物</Badge>
+          </>
+        )}
+        {data.yinYangBalance < -0.3 && (
+          <>
+            <Badge className="bg-emerald-100 text-emerald-800">人参提取物</Badge>
+            <Badge className="bg-emerald-100 text-emerald-800">黄芪提取物</Badge>
+          </>
+        )}
+        {data.meridianBalance.liver < 70 && (
+          <Badge className="bg-emerald-100 text-emerald-800">菊花提取物</Badge>
+        )}
+        {data.meridianBalance.spleen < 70 && (
+          <Badge className="bg-emerald-100 text-emerald-800">黄芪提取物</Badge>
+        )}
+        {data.meridianBalance.kidney < 70 && (
+          <Badge className="bg-emerald-100 text-emerald-800">枸杞提取物</Badge>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
             
             <TabsContent value="western">
               <Card>
